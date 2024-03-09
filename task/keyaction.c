@@ -143,11 +143,11 @@ void KeypressAction(uint8_t Action) {
 				break;
 
 			case ACTION_FREQUENCY_DETECT:
+				if (!gSettings.bFLock
 #ifdef ENABLE_FM_RADIO			
-				if (!gSettings.bFLock && gFM_Mode == FM_MODE_OFF) {
-# else
-				if (!gSettings.bFLock) {
+					&& gFM_Mode == FM_MODE_OFF
 #endif
+				) {
 					gInputBoxWriteIndex = 0;
 					KEY_LongPressed = false;
 					RADIO_FrequencyDetect();

@@ -408,6 +408,8 @@ void BK4819_SetSquelchRSSI(bool bIsNarrow)
 
 	static const uint8_t SquelchRssiOpenLevel[10] = {
 		0x0A,
+		0x66,
+		0x6E,
 		0x76,
 		0x7E,
 		0x86,
@@ -415,8 +417,6 @@ void BK4819_SetSquelchRSSI(bool bIsNarrow)
 		0x96,
 		0x9E,
 		0xA6,
-		0xAE,
-		0xB6,
 	};
 
 	if (gSettings.Squelch == 0){
