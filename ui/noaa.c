@@ -18,6 +18,7 @@
 #include "ui/gfx.h"
 #include "ui/helper.h"
 #include "ui/noaa.h"
+#include "misc.h"
 
 static const uint32_t gNoaaFrequencyTable[11] = {
 	16255000,
@@ -45,5 +46,6 @@ void UI_DrawNOAA(uint8_t Channel)
 	Int2Ascii(Channel + 1, 2);
 	UI_DrawString(32, 32, gShortString, 2);
 	gColorForeground = COLOR_FOREGROUND;
+	gScreenMode = SCREEN_NOAA;
 }
 

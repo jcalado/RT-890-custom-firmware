@@ -124,7 +124,6 @@ static void CheckRSSI(void)
 #ifdef ENABLE_RX_BAR		
 		UI_DrawRxSmeter(!gCurrentVfo, false);
 #endif
-		gCurrentRssi[gCurrentVfo] = Power;
 	}
 }
 

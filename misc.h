@@ -32,6 +32,9 @@ enum SCREEN_Mode_t {
 #ifdef ENABLE_REGISTER_EDIT
 	SCREEN_REGEDIT,
 #endif
+#ifdef ENABLE_NOAA
+	SCREEN_NOAA,
+#endif
 };
 
 typedef enum SCREEN_Mode_t SCREEN_Mode_t;

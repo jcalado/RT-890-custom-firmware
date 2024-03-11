@@ -52,7 +52,6 @@ uint8_t gCurrentVfo;
 ChannelInfo_t *gMainVfo;
 ChannelInfo_t gVfoState[3];
 FrequencyInfo_t gVfoInfo[2];
-uint16_t gCurrentRssi[2];
 
 bool gNoaaMode;
 uint16_t gCode;
@@ -445,6 +444,7 @@ void RADIO_NoaaRetune(void)
 	}
 	RADIO_Retune();
 	RADIO_Tune(gSettings.CurrentVfo);
+	gScreenMode = SCREEN_MAIN;
 	UI_DrawMain(true);
 }
 
@@ -456,6 +456,7 @@ void RADIO_NoaaTune(void)
 	CHANNELS_SetNoaaChannel(gNOAA_ChannelNow);
 	RADIO_Tune(2);
 	NOAA_NextChannelCountdown = 3000;
+	gScreenMode = SCREEN_NOAA;
 	gNoaaMode = false;
 }
 #endif

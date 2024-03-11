@@ -281,9 +281,6 @@ void Task_AM_fix()
 			prev_rssi[vfo]         = new_rssi;
 		}
 
-		// save the corrected RSSI level
-		gCurrentRssi[vfo] = rssi - rssi_gain_diff[vfo];
-
 		// automatically adjust the RF RX gain
 
 		// update the gain hold counter
@@ -352,10 +349,6 @@ void Task_AM_fix()
 			// RF gain difference from original QS setting
 			rssi_gain_diff[vfo] = ((int16_t)gain_table[index].gain_dB - gain_table[original_index].gain_dB) * 2;
 		}
-
-		// save the corrected RSSI level
-		gCurrentRssi[vfo] = rssi - rssi_gain_diff[vfo];
-
 		gAmFixCountdown = 100;
 	} else {
 		gAmFixCountdown = 1000;
