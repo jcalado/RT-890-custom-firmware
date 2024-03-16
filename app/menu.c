@@ -67,6 +67,10 @@ static const char Menu[][14] = {
 	"Scan Direction",
 	"Scan Resume   ",
 	"Scan Blink    ",
+	"Squelch Mode  ",
+	"Squelch RSSI  ",
+	"Squelch Noise ",
+	"Squelch Glitch",
 	"DTMF Delay    ",
 	"DTMF Interval ",
 	"DTMF Mode     ",
@@ -514,6 +518,28 @@ void MENU_AcceptSetting(void)
 		BK4819_SetMicSensitivityTuning();
 		break;
 
+	case MENU_SQUELCH_MODE:
+		gExtendedSettings.SqMode = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
+		SETTINGS_SaveGlobals();
+		BK4819_SetSquelchMode();
+		break;
+
+	case MENU_SQUELCH_RSSI:
+	case MENU_SQUELCH_NOISE:
+	case MENU_SQUELCH_GLITCH:
+		if (gMenuIndex == MENU_SQUELCH_RSSI) {
+			gExtendedSettings.SqRSSIBase = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
+		} else if (gMenuIndex == MENU_SQUELCH_NOISE) {
+			gExtendedSettings.SqNoiseBase = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
+		} else {
+			gExtendedSettings.SqGlitchBase = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
+		}
+		SETTINGS_SaveGlobals();
+		BK4819_SetSquelchGlitch(gMainVfo->bIsNarrow);
+		BK4819_SetSquelchNoise(gMainVfo->bIsNarrow);
+		BK4819_SetSquelchRSSI(gMainVfo->bIsNarrow);
+		break;
+
 	case MENU_MODULATION:
 		gVfoState[gSettings.CurrentVfo].gModulationType = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
 		CHANNELS_SaveVfo();
@@ -906,7 +932,29 @@ void MENU_DrawSetting(void)
 		gSettingCurrentValue = gExtendedSettings.MicGainLevel;
 		gSettingMaxValues = 32;
 		DISPLAY_Fill(0, 159, 1, 55, COLOR_BACKGROUND);
-		UI_DrawSettingMicGain(gSettingCurrentValue);
+		UI_DrawSettingNumList(gSettingCurrentValue, gSettingMaxValues);
+		break;
+
+	case MENU_SQUELCH_MODE:
+		gSettingCurrentValue = gExtendedSettings.SqMode;
+		gSettingMaxValues = 4;
+		DISPLAY_Fill(0, 159, 1, 55, COLOR_BACKGROUND);
+		UI_DrawSettingSquelchMode(gSettingCurrentValue);
+		break;
+	
+	case MENU_SQUELCH_RSSI:
+	case MENU_SQUELCH_NOISE:
+	case MENU_SQUELCH_GLITCH:
+		if (gMenuIndex == MENU_SQUELCH_RSSI) {
+			gSettingCurrentValue = gExtendedSettings.SqRSSIBase;
+		} else if (gMenuIndex == MENU_SQUELCH_NOISE) {
+			gSettingCurrentValue = gExtendedSettings.SqNoiseBase;
+		} else {
+			gSettingCurrentValue = gExtendedSettings.SqGlitchBase;
+		}
+		gSettingMaxValues = 255;
+		DISPLAY_Fill(0, 159, 1, 55, COLOR_BACKGROUND);
+		UI_DrawSettingNumList(gSettingCurrentValue, gSettingMaxValues);
 		break;
 
 	case MENU_MODULATION:
@@ -1289,7 +1337,17 @@ void MENU_ScrollSetting(uint8_t Key)
 		break;
 
 	case MENU_MIC_GAIN:
-		UI_DrawSettingMicGain(gSettingCurrentValue);
+		UI_DrawSettingNumList(gSettingCurrentValue, 32);
+		break;
+
+	case MENU_SQUELCH_MODE:
+		UI_DrawSettingSquelchMode(gSettingCurrentValue);
+		break;
+
+	case MENU_SQUELCH_RSSI:
+	case MENU_SQUELCH_NOISE:
+	case MENU_SQUELCH_GLITCH:
+		UI_DrawSettingNumList(gSettingCurrentValue, 255);
 		break;
 
 	case MENU_MODULATION:

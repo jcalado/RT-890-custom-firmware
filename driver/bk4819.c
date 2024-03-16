@@ -199,7 +199,7 @@ void BK4819_Init(void)
 	BK4819_WriteRegister(0x53, 0xE678);
 	BK4819_WriteRegister(0x2C, 0x5705);
 	BK4819_WriteRegister(0x4B, 0x7102);
-	BK4819_WriteRegister(0x77, 0x88EF);
+	//BK4819_WriteRegister(0x77, 0x88EF);
 	BK4819_WriteRegister(0x26, 0x13A0);
 	BK4819_SetAFResponseCoefficients(false, true,  gCalibration.RX_3000Hz_Coefficient);
 	BK4819_SetAFResponseCoefficients(false, false, gCalibration.RX_300Hz_Coefficient);
@@ -275,40 +275,45 @@ void BK4819_SetFrequency(uint32_t Frequency)
 	BK4819_WriteRegister(0x39, (Frequency >> 16) & 0xFFFFU);
 }
 
+void BK4819_SetSquelchMode(void)
+{
+	switch (gExtendedSettings.SqMode) {
+		case 0:
+			BK4819_WriteRegister(0x77, 0xFFEF); // RSSI
+			break;
+		case 1:
+			BK4819_WriteRegister(0x77, 0xCCEF); // RSSI + noise
+			break;
+		case 2:
+			BK4819_WriteRegister(0x77, 0xAAEF); // RSSI + Glitch
+			break;
+		case 3:
+			BK4819_WriteRegister(0x77, 0x88EF); // RSSI + noise + Glitch
+			break;
+	}
+}
+
 void BK4819_SetSquelchGlitch(bool bIsNarrow)
 {
 
 #ifdef ENABLE_ALT_SQUELCH
 	uint16_t Value;
 
-	static const uint8_t SquelchGlitchOpenLevel[10] = {
-		0x5A,
-		0x10,
-		0x9,
-		0x8,
-		0x7,
-		0x6,
-		0x5,
-		0x4,
-		0x3,
-		0x2,
-	};
-
 	if (gSettings.Squelch == 0){
 		Value = 255;
 	} else {
-		Value = SquelchGlitchOpenLevel[gSettings.Squelch];
+		Value = gExtendedSettings.SqGlitchBase - (gSettings.Squelch);
 	}
 
-	BK4819_WriteRegister(0x4E, (BK4819_ReadRegister(0x4E) & 0xFF) | Value);
+	BK4819_WriteRegister(0x4E, (BK4819_ReadRegister(0x4E) & 0xFF00) | Value);
 
-	if (gSettings.Squelch == 0){
+	if (gSettings.Squelch == 0 || gExtendedSettings.SqGlitchBase > 230){
 		Value = 255;
 	} else {
 		Value = (Value * 10) / 9;
 	}
 
-	BK4819_WriteRegister(0x4D, (BK4819_ReadRegister(0x4D) & 0xFF) | Value);
+	BK4819_WriteRegister(0x4D, 0xA0 << 8 | Value);
 #else
 
 	static const uint8_t gSquelchGlitchLevel[11] = {
@@ -342,31 +347,20 @@ void BK4819_SetSquelchNoise(bool bIsNarrow)
 
 	uint16_t Value;
 
-	static const uint8_t SquelchNoiseOpenLevel[10] = {
-		0xB4,
-		0x3E,
-		0x38,
-		0x32,
-		0x2C,
-		0x26,
-		0x20,
-		0x1A,
-		0x14,
-		0x0E,
-	};
-
 	if (gSettings.Squelch == 0){
 		Value = (127 << 8) | 127;
 	} else {
-		Value = SquelchNoiseOpenLevel[gSettings.Squelch];
-		if (bIsNarrow) {
+		Value = gExtendedSettings.SqNoiseBase - (gSettings.Squelch * 6);
+		if (gExtendedSettings.SqNoiseBase > 230) {
+			Value = (255 << 8) | Value;
+		} else if (bIsNarrow) {
 			Value = ((((Value - 5) * 10) / 9) << 8) | Value;
 		} else {
 			Value = (((Value * 10) / 9) << 8) | Value;
 		 }
 	}
 
-	BK4819_WriteRegister(0x4F, (BK4819_ReadRegister(0x4F) & 0x7F7F) | Value);
+	BK4819_WriteRegister(0x4F, Value);
 
 #else
 
@@ -406,23 +400,10 @@ void BK4819_SetSquelchRSSI(bool bIsNarrow)
 
 	uint16_t Value;
 
-	static const uint8_t SquelchRssiOpenLevel[10] = {
-		0x0A,
-		0x66,
-		0x6E,
-		0x76,
-		0x7E,
-		0x86,
-		0x8E,
-		0x96,
-		0x9E,
-		0xA6,
-	};
-
 	if (gSettings.Squelch == 0){
 		Value = 0;
 	} else {
-		Value = SquelchRssiOpenLevel[gSettings.Squelch];
+		Value = gExtendedSettings.SqRSSIBase + (gSettings.Squelch * 8);
 		Value = (Value << 8) | (Value * 9) / 10;
 	}
 

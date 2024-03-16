@@ -15,6 +15,7 @@ Use at your own risk and remember to back up your SPI memory before installing a
 - SSB reception
 - Light theme
 - AM Fix (improvement in AM reception with strong signals, port of @OneOfEleven's excellent work on the Quansheng UV-K5)
+- Sensitivty improvements in gain and squelch 
 - Full control over side key and main key shortcuts
 - New configurable actions (FM Radio, Scanner, FLashlight)
 - 0.01K step
@@ -26,6 +27,7 @@ Use at your own risk and remember to back up your SPI memory before installing a
   - Resume mode: Time, Carrier, No
   - Change scan direction while scanning (up/down keys)
   - Force scan resume (up/down keys)
+- Spectrum view with waterfall display
 - Reworked main menu
 - Ability to disable LED toggling when scanning
 - And much more!
@@ -46,6 +48,23 @@ Use at your own risk and remember to back up your SPI memory before installing a
 #    => Toggle key lock
 Menu => DTMF decoder
 Exit => Single/dual VFO display
+```
+
+### Tunable Squelch - Configurable in main menu
+The squelch mode can be set in the main menu.  This setting affects what variables the radio will use to determine the squelch open/close level.  There are 4 modes available:
+- RSSI (R)
+- RSSI + Noise (R + N)
+- RSSI + Glitch (R + G)
+- RSSI + Noise + Glitch (R + N + G) 
+
+Overall squelch levels (0-9) can be set from the SQL Level option in main menu (or the Shortcut Key Action).  These levels affect the squelch RSSI, Noise and Glitch settings on the radio chip.  The levels 0-9 are offsets from a base value for each setting.  These base values can be tuned for your specific radio using the Squelch RSSI, Squelch Noise and Squelch Glitch settings in the main menu.
+
+Default squelch settings:
+```
+Mode    => R + N + G
+RSSI    => 94 (Hex: 0x5E)
+Noise   => 68 (Hex: 0x44)
+Glitch  => 17 (Hex: 0x11)
 ```
 
 ### Scanning guide

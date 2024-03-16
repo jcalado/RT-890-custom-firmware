@@ -74,12 +74,12 @@ static uint8_t GetToneStatus(uint8_t CodeType, bool bMuteEnabled)
 	}
 
 	// Check DCS N
-	if (Value & 0x4000U && (CodeType == CODE_TYPE_DCS_I || bMuteEnabled)) {
+	if (Value & 0x4000U && (CodeType == CODE_TYPE_DCS_N || bMuteEnabled)) {
 		return STATUS_GOT_TONE;
 	}
 
 	// Check DCS I
-	if (Value & 0x8000U && CodeType == CODE_TYPE_DCS_N) {
+	if (Value & 0x8000U && CodeType == CODE_TYPE_DCS_I) {
 		return STATUS_GOT_TONE;
 	}
 

@@ -47,6 +47,7 @@ void BK4819_SetAFResponseCoefficients(bool bTx, bool bLowPass, uint8_t Index);
 void BK4819_EnableRX(void);
 void BK4819_SetAF(BK4819_AF_Type_t Type);
 void BK4819_SetFrequency(uint32_t Frequency);
+void BK4819_SetSquelchMode(void);
 void BK4819_SetSquelchGlitch(bool bIsNarrow);
 void BK4819_SetSquelchNoise(bool bIsNarrow);
 void BK4819_SetSquelchRSSI(bool bIsNarrow);

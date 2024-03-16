@@ -427,6 +427,11 @@ void KeypressAction(uint8_t Action) {
 				MENU_DrawSetting();
 				break;
 
+			case ACTION_BANDWIDTH:
+				gVfoState[gSettings.CurrentVfo].bIsNarrow ^= 1;
+				UI_DrawVfo(gSettings.CurrentVfo);
+				CHANNELS_SaveVfo();
+				break;
 		}
 	}
 }

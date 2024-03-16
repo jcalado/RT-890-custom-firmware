@@ -186,11 +186,11 @@ static void MuteCtcssScan(void)
 			}
 
 			// Double check the assembly, it didn't make sense!
-			Code = (Code & 0xFFF) << 16;
+			Code = (Code & 0xFFF) << 12;
 			Code |= BK4819_ReadRegister(0x6A) & 0xFFF;
 			gVfoState[gSettings.CurrentVfo].Golay = Code;
 
-			if ((Code & 0XFFFFFF) != 0x555555 && (Code & 0xFFFFFF) != 0xAAAAAA) {
+			if ((Code & 0xFFFFFF) != 0x555555 && (Code & 0xFFFFFF) != 0xAAAAAA) {
 				if (Code != 0x800000 && (Code & 0xFFFFFF) != 0xFFFFFF && (Code & 0xFFFFFF) != 0x7FFFFF) {
 					if (!gVfoState[gSettings.CurrentVfo].bIs24Bit) {
 						Code &= 0x7FFFFF;
@@ -213,7 +213,7 @@ static void MuteCtcssScan(void)
 		VFO_ClearMute();
 		Code = BK4819_ReadRegister(0x68);
 		if ((Code & 0x8000U) == 0) {
-			Code = (((Code & 0xFFFU) * 200U) / 412U) + 1U;
+			Code = (((Code & 0x1FFFU) * 200U) / 413U) + 1U;
 			if (Code > 500) {
 				Code &= 0xFFFU;
 				gVfoState[gSettings.CurrentVfo].RX.Code = Code;

@@ -50,6 +50,7 @@ enum {
 	ACTION_REG_EDIT,
 	ACTION_MIC_GAIN,
 	ACTION_MODULATION,
+	ACTION_BANDWIDTH,
 	ACTIONS_COUNT,	// used to count the number of actions, keep this last
 };
 

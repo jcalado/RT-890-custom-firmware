@@ -112,6 +112,12 @@ void SETTINGS_LoadSettings(void)
 		SetDefaultKeyShortcuts(false); //
 	}
 
+	if (gExtendedSettings.SqGlitchBase == 0xFF) {
+		gExtendedSettings.SqRSSIBase = 0x5E;
+		gExtendedSettings.SqNoiseBase = 0x44;
+		gExtendedSettings.SqGlitchBase = 0x11;
+	}
+
 	gFrequencyStep = FREQUENCY_GetStep(gSettings.FrequencyStep);
 
 	UI_SetColors(gExtendedSettings.DarkMode);

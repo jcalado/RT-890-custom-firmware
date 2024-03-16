@@ -359,11 +359,11 @@ static void HandlerLong(KEY_t Key)
 	}
 
 	bBeep740 = true;
-	if (!gReceptionMode && (
+	if (!gReceptionMode
 #ifdef ENABLE_FM_RADIO
-			gFM_Mode == FM_MODE_OFF ||
+			&& ( gFM_Mode == FM_MODE_OFF || Key == KEY_0 || Key == KEY_HASH || Key == KEY_UP || Key == KEY_DOWN)
 #endif
-			Key == KEY_0 || Key == KEY_HASH || Key == KEY_UP || Key == KEY_DOWN)) {
+	) {
 		SCREEN_TurnOn();
 		if (gScreenMode == SCREEN_MAIN) {
 			switch (Key) {

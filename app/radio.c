@@ -105,6 +105,7 @@ static void TuneCurrentVfo(void)
 	} else {
 		CSS_SetStandardCode(gVfoInfo[gCurrentVfo].CodeType, gCode, gMainVfo->Encrypt, gMainVfo->bIsNarrow);
 	}
+	BK4819_SetSquelchMode();
 	BK4819_SetSquelchGlitch(gMainVfo->bIsNarrow);
 	BK4819_SetSquelchNoise(gMainVfo->bIsNarrow);
 	BK4819_SetSquelchRSSI(gMainVfo->bIsNarrow);
@@ -192,6 +193,7 @@ static void TuneNOAA(void)
 		BK4819_WriteRegister(0x51, 0x9400 | gFrequencyBandInfo.CtcssTxGainWide);
 		BK4819_WriteRegister(0x07, 0x152C);
 	}
+	BK4819_SetSquelchMode();
 	BK4819_SetSquelchGlitch(false);
 	BK4819_SetSquelchNoise(false);
 	BK4819_SetSquelchRSSI(false);
