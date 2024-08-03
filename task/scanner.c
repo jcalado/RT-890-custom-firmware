@@ -57,7 +57,7 @@ void Task_Scanner(void) {
 #ifdef ENABLE_FM_RADIO
 				gFM_Mode > FM_MODE_OFF ? 50 :
 #endif
-				15;
+				gExtendedSettings.ScanDelay;
 		if (gExtendedSettings.ScanBlink) {
 			gpio_bits_flip(GPIOA, BOARD_GPIOA_LED_GREEN);
 		}

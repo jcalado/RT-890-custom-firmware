@@ -65,6 +65,7 @@ static const char Menu[][14] = {
 	"VOX Delay     ",
 	"RX Save Mode  ",
 	"Scan Direction",
+	"Scan Delay    ",
 	"Scan Resume   ",
 	"Scan Blink    ",
 	"Squelch Mode  ",
@@ -474,6 +475,11 @@ void MENU_AcceptSetting(void)
 	case MENU_REPEATER_MODE:
 		gSettings.RepeaterMode = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
 		UI_DrawRepeaterMode();
+		SETTINGS_SaveGlobals();
+		break;
+
+	case MENU_SCAN_DELAY:
+		gExtendedSettings.ScanDelay = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
 		SETTINGS_SaveGlobals();
 		break;
 
@@ -887,6 +893,13 @@ void MENU_DrawSetting(void)
 		gSettingMaxValues = 3;
 		DISPLAY_Fill(0, 159, 1, 55, COLOR_BACKGROUND);
 		UI_DrawSettingRepeaterMode(gSettingCurrentValue);
+		break;
+
+	case MENU_SCAN_DELAY:
+		gSettingCurrentValue = gExtendedSettings.ScanDelay;
+		gSettingMaxValues = 62;
+		DISPLAY_Fill(0, 159, 1, 55, COLOR_BACKGROUND);
+		UI_DrawSettingNumList(gSettingCurrentValue, gSettingMaxValues);
 		break;
 
 	case MENU_SCAN_RESUME:
@@ -1326,6 +1339,10 @@ void MENU_ScrollSetting(uint8_t Key)
 
 	case MENU_REPEATER_MODE:
 		UI_DrawSettingRepeaterMode(gSettingCurrentValue);
+		break;
+
+	case MENU_SCAN_DELAY:
+		UI_DrawSettingNumList(gSettingCurrentValue, 62);
 		break;
 
 	case MENU_SCAN_RESUME:

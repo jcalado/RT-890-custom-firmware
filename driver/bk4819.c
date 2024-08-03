@@ -27,7 +27,11 @@
 
 enum {
 	GPIO_FILTER_UHF     = 1U << 5,
-	GPIO_FILTER_VHF     = 1U << 6,
+#ifdef PCB_VER_2_1
+	GPIO_FILTER_VHF     = 1U << 3,
+#else
+	GPIO_FILTER_VHF	    = 1U << 6,
+#endif
 	GPIO_FILTER_UNKWOWN = 1U << 7,
 };
 

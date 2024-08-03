@@ -117,6 +117,9 @@ void SETTINGS_LoadSettings(void)
 		gExtendedSettings.SqNoiseBase = 0x44;
 		gExtendedSettings.SqGlitchBase = 0x11;
 	}
+	if (gExtendedSettings.ScanDelay == 63) {
+		gExtendedSettings.ScanDelay = 35;
+	}
 
 	gFrequencyStep = FREQUENCY_GetStep(gSettings.FrequencyStep);
 
